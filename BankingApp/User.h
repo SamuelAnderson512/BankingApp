@@ -25,6 +25,10 @@ public:
 	{
 	}
 
+	int getBalance() {
+		return userAcct.getBalance();
+	}
+
 };
 
 #endif

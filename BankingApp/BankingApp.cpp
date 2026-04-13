@@ -121,11 +121,11 @@ void start() {
 						);
 
 
-						cout << u->getName() << endl;
+						cout << u->getBalance() << endl;
 
 						delete u;
-
 						*/
+						
 					}
 
 
