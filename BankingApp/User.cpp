@@ -7,16 +7,19 @@ class User : public Person {
 
 private:
 	BankAccount userAcct;
+	string password;
+
 
 public:
-	User(const string& n, int a, int an,
-		const string& acctType, double balance)
-		: Person(),
-		userAcct(acctType, balance)
+	User(const string& n,
+		string p, int an,
+		const string& acctType,
+		double balance)
+
+		: Person(n, an),
+		userAcct(acctType, balance),
+		password(p)
 	{
-		name = n;
-		age = a;
-		acctNum = an;
 	}
 
 };
