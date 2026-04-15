@@ -23,6 +23,8 @@ public:
 	{
 	}
 
+	string getaccountType() { return userAcct.getaccountType(); }
+
 	double getBalance() {
 		return userAcct.getBalance();
 	}

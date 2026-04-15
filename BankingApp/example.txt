@@ -8,3 +8,8 @@ Login info: P@55W04D
 Name: Sammy Andy
 Balance: 20000
 Account Type:Saving
+Account#: 67452
+Login info: password
+Name: Sam
+Balance: 10000
+Account Type: SAvings

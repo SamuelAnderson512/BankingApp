@@ -19,6 +19,44 @@ public:
 
 };
 
+//helper function to check if a file exists or not
+bool fileExists(const string& name) {
+	ifstream f(name.c_str());
+	return f.good(); // Returns true if the file was opened successfully
+}
+
+void fileEdit(User u) {
+	string account = to_string(u.getAcctNum());
+
+	ofstream MyFile("Users/" + account + ".txt");
+	MyFile << account << endl;
+	MyFile << u.getName() << endl;
+	MyFile << u.getBalance() << endl;
+	MyFile << u.getPass() << endl;
+	MyFile << u.getaccountType() << endl;
+	MyFile.close();
+}
+
+void fileEdit(string a, string n, string p, string b, string t) {
+
+	string filePath = "Users/" + a + ".txt";
+
+	if(fileExists(filePath)){
+
+	ofstream MyFile("Users/" + a + ".txt");
+	MyFile << a << endl;
+	MyFile << n << endl;
+	MyFile << b << endl;
+	MyFile << p << endl;
+	MyFile << t << endl;
+	MyFile.close();
+	}
+
+	else {
+		cout << " File does not exist\n";
+	}
+}
+
 string extractValue(const string& line) {
 	size_t pos = line.find(":");
 	if (pos == string::npos) return "";
@@ -90,6 +128,13 @@ void userCreation(){
 
 	ofstream outputFile("example.txt", ofstream::app);
 
+	//Bread and Butter of New File Creation System
+	ofstream MyFile("Users/"+account+".txt");
+	fileEdit(account, name, login, balance, accountType);
+	MyFile.close();
+	cout << fileExists("Users/" + account + ".txt") << endl;
+
+
 	if (outputFile.is_open()) {
 
 		outputFile << "Account#: " << account << endl;
@@ -114,6 +159,7 @@ void userLogin() {
 	cout << "One Picked" << endl;
 	string number = "";
 
+	cout << "Enter your Account Number\n";
 	cin >> number;
 
 	ifstream inputFile("example.txt");
@@ -184,7 +230,10 @@ void userLogin() {
 
 					double newBalance = u->getBalance();
 					u->setBalance(newBalance);
-					cout << newBalance;
+					cout << "Your New Balance is: \n";
+					cout << newBalance<<endl;
+
+					fileEdit(to_string(account),name,login,to_string(newBalance),accountType);
 
 				
 				}
