@@ -1,13 +1,12 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 #include "Person.h"
 #include "BankAccount.h"
 #include "Transaction.h"
 #include "User.h"
-
-
 
 using namespace std;
 
@@ -19,22 +18,31 @@ public:
 
 };
 
+
+int countUsers() {
+	ifstream file("Users/usersindex.txt");
+	int count = 0;
+	string line;
+
+
+	if (!file.is_open()) {
+		cout << "ERROR: usersindex.txt NOT FOUND\n";
+		return 0;
+	}
+
+
+	while (getline(file, line)) {
+		if (!line.empty()) count++;
+	}
+
+	return count;
+}
+
+
 //helper function to check if a file exists or not
 bool fileExists(const string& name) {
 	ifstream f(name.c_str());
 	return f.good(); // Returns true if the file was opened successfully
-}
-
-void fileEdit(User u) {
-	string account = to_string(u.getAcctNum());
-
-	ofstream MyFile("Users/" + account + ".txt");
-	MyFile << account << endl;
-	MyFile << u.getName() << endl;
-	MyFile << u.getBalance() << endl;
-	MyFile << u.getPass() << endl;
-	MyFile << u.getaccountType() << endl;
-	MyFile.close();
 }
 
 void fileEdit(string a, string n, string p, string b, string t) {
@@ -46,7 +54,7 @@ void fileEdit(string a, string n, string p, string b, string t) {
 	ofstream MyFile("Users/" + a + ".txt");
 	MyFile << a << endl;
 	MyFile << n << endl;
-	MyFile << b << endl;
+	MyFile << fixed << setprecision(2) << stod(b) << endl;
 	MyFile << p << endl;
 	MyFile << t << endl;
 	MyFile.close();
@@ -134,6 +142,16 @@ void userCreation(){
 	MyFile.close();
 	cout << fileExists("Users/" + account + ".txt") << endl;
 
+
+
+	std::ofstream file("Users/usersindex.txt", std::ios::app);
+
+	if (!file.is_open()) {
+		std::cout << "Failed to open file\n";
+	}
+
+	file << account << endl;
+	file.close();
 
 	if (outputFile.is_open()) {
 
@@ -293,6 +311,7 @@ void start() {
 
 
 int main() {
+	cout << countUsers() << endl;
 
 	start();
 
