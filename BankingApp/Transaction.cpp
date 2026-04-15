@@ -1,15 +1,28 @@
 #include <string>
 
+#include <string>
+
 using namespace std;
 
 class Transaction {
 
 private:
-	int tNumber = 0;
+
 	double tAmt = 0;
-	string type = 0;
+	int type = 0;
 
 public:
 
+	Transaction() { tAmt = 0, type = 0; }
+
+	Transaction(double a, int t) { tAmt = a, type = t; }
+
+	int gettAmt() {
+		return tAmt;
+	}
+
+	int getType() {
+		return type;
+	}
 
 };

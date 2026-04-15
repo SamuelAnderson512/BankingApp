@@ -6,5 +6,5 @@ Account Type:Checking
 Account#: 12345
 Login info: P@55W04D
 Name: Sammy Andy
-Balance: 20000
+Balance: 30000
 Account Type:Saving

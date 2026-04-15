@@ -19,7 +19,6 @@ public:
 
 };
 
-
 string extractValue(const string& line) {
 	size_t pos = line.find(":");
 	if (pos == string::npos) return "";
@@ -33,23 +32,177 @@ string extractValue(const string& line) {
 	return value;
 }
 
+void userCreation(){
+	cout << "Two Picked" << endl;
+
+	string account = "";
+	string login = "";
+	string name = "";
+	string balance = "";
+	string accountType = "";
+
+	bool accountExists = 0;
+
+	cout << "Enter Account Number(5 digits)" << endl;
+	cin.ignore();        // clear leftover newline
+	getline(cin, account);
+
+	//############
+
+	ifstream inputFile("example.txt");
+	if (inputFile.is_open()) {
+		cout << "RF: ";
+		// Read and display each line from the file
+		string line;
+
+		while (getline(inputFile, line)) {
+			if (line.find("Account#: " + account) != string::npos) {
+				accountExists = true;
+				break;
+			}
+		}
+
+		if (accountExists) {
+			cout << "Account Number already exists" << endl;
+			return;
+		}
+
+		// Close the file after reading
+		inputFile.close();
+	}
+	else {
+		cout << "Unable to open the file for reading." << endl;
+	}
+
+	//##############
+
+	cout << "Enter Password" << endl;
+	getline(cin, login);
+
+	cout << "Enter Name" << endl;
+	getline(cin, name);
+
+	cout << "Enter Account Type" << endl;
+	getline(cin, accountType);
+
+	cout << "Enter Balance" << endl;
+	getline(cin, balance);
+
+	ofstream outputFile("example.txt", ofstream::app);
+
+	if (outputFile.is_open()) {
+
+		outputFile << "Account#: " << account << endl;
+		outputFile << "Login info: " << login << endl;
+		outputFile << "Name: " << name << endl;
+		outputFile << "Balance: " << balance << endl;
+		outputFile << "Account Type: " << accountType << endl;
+
+		outputFile.close();
+		cout << "Data written to the file successfully." << endl;
+	}
+	else {
+		cout << "Unable to open the file for writing." << endl;
+	}
+
+}
+
+void managerLogin() {}
 
 void userLogin() {
-	bool running = true;
+
+	cout << "One Picked" << endl;
+	string number = "";
+
+	cin >> number;
+
+	ifstream inputFile("example.txt");
+	if (inputFile.is_open()) {
+		cout << "Reading data from the file:" << endl;
+		// Read and display each line from the file
+		string line;
+
+		//begin reading the whole file
+		while (getline(inputFile, line)) {
+
+			//if we find the account number in the file.
+
+			if (line.find("Account#: " + number) != string::npos) {
+
+				int account = stoi(extractValue(line));
+				string login;
+				string name;
+				int balance = 0;
+				string accountType;
+
+				cout << line << endl;
+
+				for (int i = 0; i < 4; i++) {
+					if (getline(inputFile, line)) {
+						cout << line << endl;
+
+						string value = extractValue(line);
+
+						if (i == 0)      login = value;
+						else if (i == 1) name = value;
+						else if (i == 2) balance = stoi(value);
+						else if (i == 3) accountType = value;
+					}
+				}
+
+				//Test Code showing objects can be initialized from the file.
 
 
-	while (running) {
+				User* u = new User(
+					name,
+					login,
+					account,
+					accountType,
+					balance
+				);
 
-		//cout << Welcome object.name
-		
-		// 1. Make a transaction, 2. Make a Deposit, 3. Exit
+				int input = 0;
+				double depot = 0;
 
-		//if 1 { object.balance = object.balance - transaction, example.txt balance changed}
+				cout << "Hello " << u->getName() << endl;
+				cout << u->getBalance() << endl;
+				cout << "What Action Would You Like to Complete?\n";
+				cout << "1. Make A Deposit\n";
+				cout << "2. Make A Withdrawal\n";
+				cout << "3. Exit\n";
 
-		// if 2 { object.balance = object.balance + deposit, example.txt balance changed}
+				
 
-		// if 3 running = false;
+				cin >> input;
+				if (input == 1) { 
+					cout << "Enter Deposit Amount\n";
+					cin >> depot;
+					
+					Transaction tran = Transaction(depot, input);
 
+					u->transact(tran);
+
+					double newBalance = u->getBalance();
+					u->setBalance(newBalance);
+					cout << newBalance;
+
+				
+				}
+				if (input == 2) {}
+				if (input == 3) {}
+
+				delete u;
+
+
+			}
+
+
+		}
+		// Close the file after reading
+		inputFile.close();
+	}
+	else {
+		cout << "Unable to open the file for reading." << endl;
 	}
 
 }
@@ -69,153 +222,15 @@ void start() {
 		cin >> response;
 
 		if (response == 1) {
-
-			cout << "One Picked" << endl;
-			string number = "";
-
-			cin >> number;
-
-			ifstream inputFile("example.txt");
-			if (inputFile.is_open()) {
-				cout << "Reading data from the file:" << endl;
-				// Read and display each line from the file
-				string line;
-
-				//begin reading the whole file
-				while (getline(inputFile, line)) {
-
-					//if we find the account number in the file.
-
-					if (line.find("Account#: " + number) != string::npos) {
-
-						int account = stoi(extractValue(line));
-						string login;
-						string name;
-						int balance = 0;
-						string accountType;
-
-						cout << line << endl;
-
-						for (int i = 0; i < 4; i++) {
-							if (getline(inputFile, line)) {
-								cout << line << endl;
-
-								string value = extractValue(line);
-
-								if (i == 0)      login = value;
-								else if (i == 1) name = value;
-								else if (i == 2) balance = stoi(value);
-								else if (i == 3) accountType = value;
-							}
-						}
-
-						//Test Code showing objects can be initialized from the file.
-
-						/*
-						User* u = new User(
-							name,
-							login,
-							account,
-							accountType,
-							balance
-						);
-
-
-						cout << u->getBalance() << endl;
-
-						delete u;
-						*/
-						
-					}
-
-
-				}
-				// Close the file after reading
-				inputFile.close();
-			}
-			else {
-				cout << "Unable to open the file for reading." << endl;
-			}
+			userLogin();
 		}
 
 		if (response == 2) {
-			cout << "Two Picked" << endl;
-
-			string account = "";
-			string login = "";
-			string name = "";
-			string balance ="";
-			string accountType = "";
-
-			bool accountExists = 0;
-
-			cout << "Enter Account Number(5 digits)" << endl;
-			cin.ignore();        // clear leftover newline
-			getline(cin, account);
-
-			//############
-
-			ifstream inputFile("example.txt");
-			if (inputFile.is_open()) {
-				cout << "RF: ";
-				// Read and display each line from the file
-				string line;
-
-				while (getline(inputFile, line)) {
-					if (line.find("Account#: " + account) != string::npos) {
-						accountExists = true;
-						break;
-					}
-				}
-
-				if (accountExists) {
-					cout << "Account Number already exists"<<endl;
-					continue;
-				}
-
-				// Close the file after reading
-				inputFile.close();
-			}
-			else {
-				cout << "Unable to open the file for reading." << endl;
-			}
-
-			//##############
-
-			cout << "Enter Password" << endl;
-			getline(cin, login);
-
-			cout << "Enter Name" << endl;
-			getline(cin, name);
-
-			cout << "Enter Account Type" << endl;
-			getline(cin, accountType);
-
-			cout << "Enter Balance" << endl;
-			getline(cin, balance);
-
-			ofstream outputFile("example.txt", ofstream::app);
-
-			if (outputFile.is_open()) {
-
-				outputFile << "Account#: " << account << endl;
-				outputFile << "Login info: " << login << endl;
-				outputFile << "Name: " << name << endl;
-				outputFile << "Balance: " << balance << endl;
-				outputFile << "Account Type: " << accountType << endl;
-
-				outputFile.close();
-				cout << "Data written to the file successfully." << endl;
-			}
-			else {
-				cout << "Unable to open the file for writing." << endl;
-			}
-
+			userCreation();
 		}
-		if (response == 3) { cout << "Three Picked"; }
+		if (response == 3) { cout << "Three Picked\n"; }
 		if (response == 4) {
 		
-
 			cout << "Exiting...\n";
 			running = false;
 
@@ -229,18 +244,6 @@ void start() {
 
 
 int main() {
-
-/*
-	User* u = new User("John Smith",
-		"mypassword",
-		12345,
-		"Checking",
-		1500.00);
-
-	cout << u->getAcctNum() << endl;
-
-	delete u;
-*/
 
 	start();
 

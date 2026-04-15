@@ -1,4 +1,6 @@
+#include <iostream>
 #include <string>
+#include <fstream>
 #include "Transaction.h"
 
 using namespace std;
@@ -9,6 +11,7 @@ private:
 
 	string accountType;
 	double balance;
+	int transactionCount = 0;
 
 	Transaction tList[100];
 
@@ -22,7 +25,19 @@ public:
 
 	void setaccountType(string s) { accountType = s; }
 	void setBalance(double b) { balance = b; }
-	void setBalance(double b, double e) { balance = b + e; }
+
+	void transact(Transaction t) {
+		if (t.getType() == 1) {
+			cout << "EPIC BACON DEPOSIT\n";
+			balance = balance + t.gettAmt();
+		}
+		if (t.getType() == 2) {
+			cout << "EPIC BACON WITHDRAW\n";
+			balance = balance - t.gettAmt();
+		}
+
+
+	}
 
 
 };

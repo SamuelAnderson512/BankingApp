@@ -10,7 +10,6 @@ class User : public Person {
 
 private:
 	BankAccount userAcct;
-	string password;
 
 
 public:
@@ -19,14 +18,21 @@ public:
 		const string& acctType,
 		double balance)
 
-		: Person(n, an),
-		userAcct(acctType, balance),
-		password(p)
+		: Person(n, p, an),
+		userAcct(acctType, balance)
 	{
 	}
 
-	int getBalance() {
+	double getBalance() {
 		return userAcct.getBalance();
+	}
+
+	void setBalance(double b) {
+		userAcct.setBalance(b);
+	}
+
+	void transact(Transaction t) {
+		userAcct.transact(t);
 	}
 
 };
