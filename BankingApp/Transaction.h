@@ -17,7 +17,7 @@ public:
 
 	Transaction(double a, int t) { tAmt = a, type = t; }
 
-	int gettAmt() {
+	double gettAmt() {
 		return tAmt;
 	}
 

@@ -45,7 +45,7 @@ bool fileExists(const string& name) {
 	return f.good(); // Returns true if the file was opened successfully
 }
 
-void fileEdit(string a, string n, string p, string b, string t) {
+void fileEdit(string a, string n, string p, double b, string t) {
 
 	string filePath = "Users/" + a + ".txt";
 
@@ -54,7 +54,7 @@ void fileEdit(string a, string n, string p, string b, string t) {
 	ofstream MyFile("Users/" + a + ".txt");
 	MyFile << a << endl;
 	MyFile << n << endl;
-	MyFile << fixed << setprecision(2) << stod(b) << endl;
+	MyFile << fixed << setprecision(2) << b << endl;
 	MyFile << p << endl;
 	MyFile << t << endl;
 	MyFile.close();
@@ -64,6 +64,8 @@ void fileEdit(string a, string n, string p, string b, string t) {
 		cout << " File does not exist\n";
 	}
 }
+
+
 
 string extractValue(const string& line) {
 	size_t pos = line.find(":");
@@ -138,7 +140,7 @@ void userCreation(){
 
 	//Bread and Butter of New File Creation System
 	ofstream MyFile("Users/"+account+".txt");
-	fileEdit(account, name, login, balance, accountType);
+	fileEdit(account, name, login, stod(balance), accountType);
 	MyFile.close();
 	cout << fileExists("Users/" + account + ".txt") << endl;
 
@@ -196,7 +198,7 @@ void userLogin() {
 				int account = stoi(extractValue(line));
 				string login;
 				string name;
-				int balance = 0;
+				double balance = 0.0;
 				string accountType;
 
 				cout << line << endl;
@@ -209,7 +211,7 @@ void userLogin() {
 
 						if (i == 0)      login = value;
 						else if (i == 1) name = value;
-						else if (i == 2) balance = stoi(value);
+						else if (i == 2) balance = stod(value);
 						else if (i == 3) accountType = value;
 					}
 				}
@@ -227,6 +229,7 @@ void userLogin() {
 
 				int input = 0;
 				double depot = 0;
+				double with = 0;
 
 				cout << "Hello " << u->getName() << endl;
 				cout << u->getBalance() << endl;
@@ -247,15 +250,33 @@ void userLogin() {
 					u->transact(tran);
 
 					double newBalance = u->getBalance();
-					u->setBalance(newBalance);
 					cout << "Your New Balance is: \n";
-					cout << newBalance<<endl;
+					cout << fixed << setprecision(2) << newBalance << endl;
 
-					fileEdit(to_string(account),name,login,to_string(newBalance),accountType);
+					fileEdit(to_string(account),name,login,newBalance,accountType);
 
 				
 				}
-				if (input == 2) {}
+				if (input == 2) {
+					cout << "Enter Withdrawal Amount\n";
+					cin >> with;
+
+					if(u -> getBalance() < with){
+						cout << "Insufficient Funds"<<endl;
+						cout << "Your Balance is: " << u->getBalance() << endl;
+					}
+					else {
+						Transaction tran = Transaction(with, input);
+
+						u->transact(tran);
+
+						double newBalance = u->getBalance();
+						cout << "Your New Balance is: \n";
+						cout << fixed << setprecision(2) << newBalance << endl;
+
+						fileEdit(to_string(account), name, login, newBalance, accountType);
+					}
+				}
 				if (input == 3) {}
 
 				delete u;
