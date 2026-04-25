@@ -21,7 +21,7 @@ void userOperations(User& user) {
         std::cout << "1: Make a Deposit" << std::endl;
         std::cout << "2: Make a Withdrawal" << std::endl;
         std::cout << "3: Exit" << std::endl;
-        std::cout << "4: Make a Withdrawal" << std::endl;
+        std::cout << "4: Show Transactions" << std::endl;
 
         std::cin >> choice;
 
@@ -269,8 +269,6 @@ void ui() {
 
 int main()
 {
-
-    std::cout << FileManager::countUsers() << std::endl;
 
     //FileManager::saveUser(user);
     ui();
