@@ -1,35 +1,31 @@
-#include <string>
-using namespace std;
+#include "Person.h"
 
-class Person {
+Person::Person(const std::string& n, const std::string& p, int an)
+    : name(n), password(p), acctNum(an) {
+}
 
+Person::~Person() = default;
 
-protected:
+std::string Person::getName() const {
+    return name;
+}
 
-	string name = "";
-	string password = "";
-	int acctNum = 0;
+std::string Person::getPass() const {
+    return password;
+}
 
-public:
+int Person::getAcctNum() const {
+    return acctNum;
+}
 
-	Person() : name(""), password(""), acctNum(0) {}
+void Person::setName(const std::string& n) {
+    name = n;
+}
 
-	Person(string n, string p, int an) {
+void Person::setPass(const std::string& p) {
+    password = p;
+}
 
-		name = n;
-		password = p;
-		acctNum = an;
-
-	};
-
-	string getName() const { return name; }
-	string getPass() const { return password; }
-	int getAcctNum() const { return acctNum; }
-
-	void setName(string& n) { name = n; }
-	void setPass(string& p) { password = p; }
-	void setAcctNum(int a) { acctNum = a; }
-
-	static int userAmt;
-
-};
+void Person::setAcctNum(int an) {
+    acctNum = an;
+}

@@ -1,341 +1,278 @@
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <iomanip>
-
-#include "Person.h"
-#include "BankAccount.h"
-#include "Transaction.h"
+#include "Manager.h"
 #include "User.h"
+#include "Transaction.h"
+#include "FileManager.h"
+#include <string>
 
-using namespace std;
+//Debug User and Manager(DO NOT USE UNLESS YOU KNOW THE ACCT NUMBER HAS BEEN REMOVED)
+//User user("Samuel", "Password", 1000, 10000);
+//Manager manny("Garret", "P@$$", 1001);
 
-class Manager : public Person {
+void userOperations(User& user) {
+    bool running = true;
+    int choice;
+    int transactionAmt = 0;
+    std::cout << "You Have Been Logged In!" << std::endl;
+    std::cout << "Your Balance is: " << user.getBankAccount().getBalance() << std::endl;
+    while (running) {
+        transactionAmt = 0;
 
-private:
+        std::cout << "1: Make a Deposit" << std::endl;
+        std::cout << "2: Make a Withdrawal" << std::endl;
+        std::cout << "3: Exit" << std::endl;
+        std::cout << "4: Make a Withdrawal" << std::endl;
 
-public:
+        std::cin >> choice;
 
-};
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid input. Try again.\n";
+            continue;
+        }
 
+        switch (choice) {
+        case 1: {
+            std::cout << "How Large?\n";
 
-int countUsers() {
-	ifstream file("Users/usersindex.txt");
-	int count = 0;
-	string line;
+            if (!(std::cin >> transactionAmt)) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Invalid amount\n";
+                break;
+            }
 
+            Transaction t(transactionAmt, true);
+            user.getBankAccount().transact(t);
+            FileManager::saveTransaction(user.getAcctNum(), t);
+            FileManager::saveUser(user);
 
-	if (!file.is_open()) {
-		cout << "ERROR: usersindex.txt NOT FOUND\n";
-		return 0;
-	}
+            break;
+        }
+        case 2: {
+            std::cout << "How Large?\n";
+            std::cin >> transactionAmt;
+            Transaction t(transactionAmt, false);
+            user.getBankAccount().transact(t);
+            FileManager::saveUser(user);
+            FileManager::saveTransaction(user.getAcctNum(), t);
 
+            /*
+            if (check == 1) {
+                //Call File Manager to update users file, and transaction history
+            }
+            */
+            //We will either be returned a success or failure(we cannot take money that isnt there.)
 
-	while (getline(file, line)) {
-		if (!line.empty()) count++;
-	}
+            break;
+        }
+        case 3:
+            running = false;
+            break;
+        case 4:
+            user.getBankAccount().printTransactions();
+            break;
+        default:
+            std::cout << "Invalid choice\n";
+            break;
+        }
 
-	return count;
-}
-
-
-//helper function to check if a file exists or not
-bool fileExists(const string& name) {
-	ifstream f(name.c_str());
-	return f.good(); // Returns true if the file was opened successfully
-}
-
-void fileEdit(string a, string n, string p, double b, string t) {
-
-	string filePath = "Users/" + a + ".txt";
-
-	if(fileExists(filePath)){
-
-	ofstream MyFile("Users/" + a + ".txt");
-	MyFile << a << endl;
-	MyFile << n << endl;
-	MyFile << fixed << setprecision(2) << b << endl;
-	MyFile << p << endl;
-	MyFile << t << endl;
-	MyFile.close();
-	}
-
-	else {
-		cout << " File does not exist\n";
-	}
-}
-
-
-
-string extractValue(const string& line) {
-	size_t pos = line.find(":");
-	if (pos == string::npos) return "";
-
-	string value = line.substr(pos + 1);
-
-	// remove leading space
-	if (!value.empty() && value[0] == ' ')
-		value.erase(0, 1);
-
-	return value;
-}
-
-void userCreation(){
-	cout << "Two Picked" << endl;
-
-	string account = "";
-	string login = "";
-	string name = "";
-	string balance = "";
-	string accountType = "";
-
-	bool accountExists = 0;
-
-	cout << "Enter Account Number(5 digits)" << endl;
-	cin.ignore();        // clear leftover newline
-	getline(cin, account);
-
-	//############
-
-	ifstream inputFile("example.txt");
-	if (inputFile.is_open()) {
-		cout << "RF: ";
-		// Read and display each line from the file
-		string line;
-
-		while (getline(inputFile, line)) {
-			if (line.find("Account#: " + account) != string::npos) {
-				accountExists = true;
-				break;
-			}
-		}
-
-		if (accountExists) {
-			cout << "Account Number already exists" << endl;
-			return;
-		}
-
-		// Close the file after reading
-		inputFile.close();
-	}
-	else {
-		cout << "Unable to open the file for reading." << endl;
-	}
-
-	//##############
-
-	cout << "Enter Password" << endl;
-	getline(cin, login);
-
-	cout << "Enter Name" << endl;
-	getline(cin, name);
-
-	cout << "Enter Account Type" << endl;
-	getline(cin, accountType);
-
-	cout << "Enter Balance" << endl;
-	getline(cin, balance);
-
-	ofstream outputFile("example.txt", ofstream::app);
-
-	//Bread and Butter of New File Creation System
-	ofstream MyFile("Users/"+account+".txt");
-	fileEdit(account, name, login, stod(balance), accountType);
-	MyFile.close();
-	cout << fileExists("Users/" + account + ".txt") << endl;
-
-
-
-	std::ofstream file("Users/usersindex.txt", std::ios::app);
-
-	if (!file.is_open()) {
-		std::cout << "Failed to open file\n";
-	}
-
-	file << account << endl;
-	file.close();
-
-	if (outputFile.is_open()) {
-
-		outputFile << "Account#: " << account << endl;
-		outputFile << "Login info: " << login << endl;
-		outputFile << "Name: " << name << endl;
-		outputFile << "Balance: " << balance << endl;
-		outputFile << "Account Type: " << accountType << endl;
-
-		outputFile.close();
-		cout << "Data written to the file successfully." << endl;
-	}
-	else {
-		cout << "Unable to open the file for writing." << endl;
-	}
+    }
 
 }
 
-void managerLogin() {}
+void managerOperations(Manager& man) {
 
-void userLogin() {
+    bool running = true;
+    int choice;
+    int userAcctNum;
 
-	cout << "One Picked" << endl;
-	string number = "";
+    std::cout << "Hello: " << man.getName() << std::endl;
+    while (running) {
+        choice = 0;
+        std::cout << "1: Delete a User" << std::endl;
+        std::cout << "2:  Check Active Users" << std::endl;
+        std::cout << "3: Exit" << std::endl;
+        std::cin >> choice;
 
-	cout << "Enter your Account Number\n";
-	cin >> number;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid input. Try again.\n";
+            continue;
+        }
 
-	ifstream inputFile("example.txt");
-	if (inputFile.is_open()) {
-		cout << "Reading data from the file:" << endl;
-		// Read and display each line from the file
-		string line;
+        switch (choice) {
 
-		//begin reading the whole file
-		while (getline(inputFile, line)) {
+        case 1: {
+            std::cout << "Enter User's Account Number\n";
+            std::cin >> userAcctNum;
+            man.deleteUser(userAcctNum);
+            break;
+        }
 
-			//if we find the account number in the file.
+        case 2: {
 
-			if (line.find("Account#: " + number) != string::npos) {
+            man.getActiveAccounts();
 
-				int account = stoi(extractValue(line));
-				string login;
-				string name;
-				double balance = 0.0;
-				string accountType;
+            break;
+        }
 
-				cout << line << endl;
+        case 3: {
 
-				for (int i = 0; i < 4; i++) {
-					if (getline(inputFile, line)) {
-						cout << line << endl;
+            running = false;
 
-						string value = extractValue(line);
+            break;
+        }
 
-						if (i == 0)      login = value;
-						else if (i == 1) name = value;
-						else if (i == 2) balance = stod(value);
-						else if (i == 3) accountType = value;
-					}
-				}
+        }
 
-				//Test Code showing objects can be initialized from the file.
+    }
+}
 
+void userLoginUi() {
+    bool running = true;
+    int accountNumber = 0;
+    while (running) {
 
-				User* u = new User(
-					name,
-					login,
-					account,
-					accountType,
-					balance
-				);
+        std::cout << "User Login Chosen" << std::endl;
+        std::cout << "Enter Your Account Number" << std::endl;
+        std::cout << "Type -1 to Leave" << std::endl;
+        std::cin >> accountNumber;
 
-				int input = 0;
-				double depot = 0;
-				double with = 0;
+        User user = FileManager::loadUser(accountNumber);
 
-				cout << "Hello " << u->getName() << endl;
-				cout << u->getBalance() << endl;
-				cout << "What Action Would You Like to Complete?\n";
-				cout << "1. Make A Deposit\n";
-				cout << "2. Make A Withdrawal\n";
-				cout << "3. Exit\n";
+        if (user.getAcctNum() == -1) {
+            std::cout << "Invalid user\n";
+            return;
+        }
 
-				
+        FileManager::loadTransactions(user.getAcctNum(), user.getBankAccount());
 
-				cin >> input;
-				if (input == 1) { 
-					cout << "Enter Deposit Amount\n";
-					cin >> depot;
-					
-					Transaction tran = Transaction(depot, input);
+        userOperations(user);
+        return;
 
-					u->transact(tran);
-
-					double newBalance = u->getBalance();
-					cout << "Your New Balance is: \n";
-					cout << fixed << setprecision(2) << newBalance << endl;
-
-					fileEdit(to_string(account),name,login,newBalance,accountType);
-
-				
-				}
-				if (input == 2) {
-					cout << "Enter Withdrawal Amount\n";
-					cin >> with;
-
-					if(u -> getBalance() < with){
-						cout << "Insufficient Funds"<<endl;
-						cout << "Your Balance is: " << u->getBalance() << endl;
-					}
-					else {
-						Transaction tran = Transaction(with, input);
-
-						u->transact(tran);
-
-						double newBalance = u->getBalance();
-						cout << "Your New Balance is: \n";
-						cout << fixed << setprecision(2) << newBalance << endl;
-
-						fileEdit(to_string(account), name, login, newBalance, accountType);
-					}
-				}
-				if (input == 3) {}
-
-				delete u;
+        //FileManager Searches User Index for Account Number
+        //IfFound load user class from file using FileManager
+               //userOperations() called with user object passed through
+        //Elseif -1 typed: return
+        //Else try again
+        //return called right after since we assume when they are done with their account that they aren't going to log in again
 
 
-			}
+    }
 
+}
+void userCreateUi() {
 
-		}
-		// Close the file after reading
-		inputFile.close();
-	}
-	else {
-		cout << "Unable to open the file for reading." << endl;
-	}
+    int accountNumber = 1001;
+    std::string name = "";
+    std::string password = "";
+    double balance = 0;
+    //check what the next account number can be and assign it to a variable
+    //get the users name
+    std::cout << "Enter your Name: \n";
+    std::cin >> name;
+    //get the balance
+    std::cout << "Enter your Password: \n";
+    std::cin >> password;
+    //get a password
+    std::cout << "Enter your Balance: \n";
+    std::cin >> balance;
+    //create user object
+    User current(name, password, FileManager::getNextAccountNumber(), balance);
+    std::cout << "Account Created for " << current.getName() << std::endl;
+    FileManager::saveUser(current);
+    FileManager::writeUserIndex(current.getAcctNum());
+    //Call file manager to write user object into a file
+    //Move to login(We will need to end the loop end the function, then move to login)
+    //We need to return a value so we know whetehr we normal made an account or exited
+    std::cout << current.getName() << std::endl;
+    std::cout << current.getAcctNum() << std::endl;
+    std::cout << current.getPass() << std::endl;
+    std::cout << current.getBankAccount().getBalance() << std::endl;
 
+}
+void managerUi() {
+
+    bool running = true;
+    int accountNumber = 0;
+    while (running) {
+
+        std::cout << "Manager Login Chosen" << std::endl;
+        std::cout << "Enter Your Account Number" << std::endl;
+        std::cout << "Type -1 to Leave" << std::endl;
+        std::cin >> accountNumber;
+
+        if (accountNumber == -1) { return; }
+
+        Manager man = FileManager::loadManager(accountNumber);
+
+        managerOperations(man);
+        return;
+        //check active user amount
+            //Have fileManager count how many lines are in userindex and return
+        //Remove User Account
+            //Enter in a user acctNumber
+            // check if account number exists
+            //confirm screen
+            //call on fileManger to delete user from index, delete transaction history, and delete user account
+    }
+}
+
+void ui() {
+    bool running = true;
+    int choice = 0;
+
+    while (running) {
+
+        std::cout << "Welcome to Sam and Peyton's Banking Application" << std::endl;
+        std::cout << "Choose an Option:" << std::endl;
+        std::cout << "1: User Login" << std::endl;
+        std::cout << "2: Manager Login" << std::endl;
+        std::cout << "3: User Creation" << std::endl;
+        std::cout << "4: Exit" << std::endl;
+        std::cin >> choice;
+
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid input. Try again.\n";
+            continue;
+        }
+
+        switch (choice) {
+        case 1:
+            std::cout << "You picked User Login" << std::endl;
+            userLoginUi();
+            break;
+        case 2:
+            std::cout << "You picked Manager Login" << std::endl;
+            managerUi();
+            break;
+        case 3:
+            std::cout << "You picked User Creation" << std::endl;
+            userCreateUi();
+            break;
+        case 4:
+            running = false;
+            break;
+        default:
+            std::cout << "Unsure of your Answer, Please try again" << std::endl;
+            break;
+        }
+
+    }
 }
 
 
+int main()
+{
 
-void start() {
+    std::cout << FileManager::countUsers() << std::endl;
 
-	bool running = true;
-
-	while (running) {
-
-		int response = 0;
-
-		cout << "1. User Login\n2. Create Account\n3. Manager Login\n4. Exit\n";
-
-		cin >> response;
-
-		if (response == 1) {
-			userLogin();
-		}
-
-		if (response == 2) {
-			userCreation();
-		}
-		if (response == 3) { cout << "Three Picked\n"; }
-		if (response == 4) {
-		
-			cout << "Exiting...\n";
-			running = false;
-
-		}
-
-	}
-
+    //FileManager::saveUser(user);
+    ui();
 }
 
-
-
-
-int main() {
-	cout << countUsers() << endl;
-
-	start();
-
-	
-	return 0;
-}

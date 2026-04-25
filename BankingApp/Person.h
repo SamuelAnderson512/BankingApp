@@ -2,38 +2,32 @@
 #define PERSON_H
 
 #include <string>
-using namespace std;
 
 class Person {
 
-
 protected:
-
-	string name = "";
-	string password = "";
-	int acctNum = 0;
+	std::string name;
+	std::string password;
+	int acctNum;
 
 public:
 
-	Person() : name(""), password(""), acctNum(0) {}
 
-	Person(string n, string p, int an) {
 
-		name = n;
-		password = p;
-		acctNum = an;
+	Person(const std::string& n, const std::string& p, int an);
 
-	};
+	virtual ~Person();
 
-	string getName() const { return name; }
-	string getPass() const { return password; }
-	int getAcctNum() const { return acctNum; }
+	std::string getName() const;
+	std::string getPass() const;
+	int getAcctNum() const;
 
-	void setName(string& n) { name = n; }
-	void setPass(string& p) { password = p; }
-	void setAcctNum(int a) { acctNum = a; }
+	void setName(const std::string& n);
+	void setPass(const std::string& p);
+	void setAcctNum(int an);
 
-	static int userAmt;
+	virtual std::string getDirectoryFile() const = 0;
+	virtual std::string getRole() const = 0;
 
 };
 

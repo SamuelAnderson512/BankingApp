@@ -1,48 +1,33 @@
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
-
-#include <iostream>
 #include <string>
-#include <fstream>
 #include "Transaction.h"
 
-using namespace std;
-
-
 class BankAccount {
-private:
 
-	string accountType;
+protected:
+	Transaction* transactionList;
+	int size;
+	int capacity;
 	double balance;
-	int transactionCount = 0;
 
-	Transaction tList[100];
+	void resize();
 
 public:
+	BankAccount(double initialBalance);
+	~BankAccount();
 
-	BankAccount(string a, double b) { accountType = a; balance = b; }
-	//~BankAccount();
+	double getBalance() const;
+	void setBalance(double b);
 
-	string getaccountType() { return accountType; }
-	double getBalance() { return balance; }
+	int transact(const Transaction& t);
 
-	void setaccountType(string s) { accountType = s; }
-	void setBalance(double b) { balance = b; }
+	void loadTransaction(const Transaction& t);
 
-	void transact(Transaction t) {
-		if (t.getType() == 1) {
-			cout << "EPIC BACON DEPOSIT\n";
-			balance = balance + t.gettAmt();
-		}
-		if (t.getType() == 2) {
-			cout << "EPIC BACON WITHDRAW\n";
-			balance = balance - t.gettAmt();
-		}
-
-
-	}
+	void printTransactions() const;
 
 
 };
+
 
 #endif
