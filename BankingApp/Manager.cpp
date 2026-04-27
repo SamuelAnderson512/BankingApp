@@ -12,10 +12,11 @@ Manager::Manager(
 
 }
 
+//Use of A pure virtual Method derived from the abstract Person class
 std::string Manager::getDirectoryFile() const {
 	return "Managers/" + std::to_string(acctNum) + ".txt";
 }
-
+//Use of A pure virtual Method derived from the abstract Person class
 std::string Manager::getRole() const {
 	return "Manager";
 }

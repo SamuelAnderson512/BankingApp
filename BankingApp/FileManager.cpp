@@ -30,7 +30,7 @@ void FileManager::removeUserFromIndex(int accountNumber)
 // USER CRUD
 void FileManager::saveUser(User& user) {
 
-	std::ofstream file("users/" + std::to_string(user.getAcctNum()) + ".txt");
+	std::ofstream file(user.getDirectoryFile());
 
 	file << user.getName() << "\n";
 	file << user.getPass() << "\n";

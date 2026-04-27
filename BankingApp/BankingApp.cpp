@@ -6,14 +6,14 @@
 #include <string>
 
 //Debug User and Manager(DO NOT USE UNLESS YOU KNOW THE ACCT NUMBER HAS BEEN REMOVED)
-//User user("Samuel", "Password", 1000, 10000);
-//Manager manny("Garret", "P@$$", 1001);
+//User user("Samuel", "Password", 999, 10000);
+//Manager manny("Garret", "P@$$", 999);
 
 void userOperations(User& user) {
     bool running = true;
     int choice;
-    int transactionAmt = 0;
-    std::cout << "You Have Been Logged In!" << std::endl;
+    double transactionAmt = 0;
+    std::cout << "Hello "<<user.getRole() <<": "<<user.getName() << std::endl;
     std::cout << "Your Balance is: " << user.getBankAccount().getBalance() << std::endl;
     while (running) {
         transactionAmt = 0;
@@ -87,8 +87,9 @@ void managerOperations(Manager& man) {
     bool running = true;
     int choice;
     int userAcctNum;
+    int deletionCertainty = 0;
 
-    std::cout << "Hello: " << man.getName() << std::endl;
+    std::cout << "Hello "<< man.getRole()<<": " << man.getName() << std::endl;
     while (running) {
         choice = 0;
         std::cout << "1: Delete a User" << std::endl;
@@ -108,7 +109,15 @@ void managerOperations(Manager& man) {
         case 1: {
             std::cout << "Enter User's Account Number\n";
             std::cin >> userAcctNum;
+            std::cout << "Are you Certain you want to delete: " << std::to_string(userAcctNum) << std::endl;
+            std::cout << "Enter 1 for Yes and anything else for No: " << std::endl;
+            std::cin >> deletionCertainty;
+
+            if (deletionCertainty == 1){
             man.deleteUser(userAcctNum);
+            }
+
+            else { std::cout << "Your Response was not 1: User will not be deleted" << std::endl; }
             break;
         }
 
@@ -134,17 +143,24 @@ void managerOperations(Manager& man) {
 void userLoginUi() {
     bool running = true;
     int accountNumber = 0;
+    std::string pass = "";
     while (running) {
 
         std::cout << "User Login Chosen" << std::endl;
         std::cout << "Enter Your Account Number" << std::endl;
         std::cout << "Type -1 to Leave" << std::endl;
         std::cin >> accountNumber;
+        std::cout << "Enter Your Password" << std::endl;
+        std::cin >> pass;
 
         User user = FileManager::loadUser(accountNumber);
 
         if (user.getAcctNum() == -1) {
             std::cout << "Invalid user\n";
+            return;
+        }
+
+        else if (pass != user.getPass() || pass == "") {
             return;
         }
 
@@ -198,19 +214,28 @@ void managerUi() {
 
     bool running = true;
     int accountNumber = 0;
+    std::string pass = "";
     while (running) {
 
         std::cout << "Manager Login Chosen" << std::endl;
         std::cout << "Enter Your Account Number" << std::endl;
         std::cout << "Type -1 to Leave" << std::endl;
         std::cin >> accountNumber;
+        std::cout << "Enter Your Password" << std::endl;
+        std::cin >> pass;
 
         if (accountNumber == -1) { return; }
 
         Manager man = FileManager::loadManager(accountNumber);
 
+        if (man.getAcctNum() == -1 || pass != man.getPass() || man.getPass() == "") {
+            return;
+        }
+
+        else{
         managerOperations(man);
         return;
+        }
         //check active user amount
             //Have fileManager count how many lines are in userindex and return
         //Remove User Account
