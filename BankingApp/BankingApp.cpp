@@ -36,7 +36,7 @@ void userOperations(User& user) {
         case 1: {
             std::cout << "How Large?\n";
 
-            if (!(std::cin >> transactionAmt)) {
+            if (!(std::cin >> transactionAmt)||transactionAmt < 0) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Invalid amount\n";
@@ -53,10 +53,13 @@ void userOperations(User& user) {
         case 2: {
             std::cout << "How Large?\n";
             std::cin >> transactionAmt;
-            Transaction t(transactionAmt, false);
-            user.getBankAccount().transact(t);
-            FileManager::saveUser(user);
-            FileManager::saveTransaction(user.getAcctNum(), t);
+            if (transactionAmt > 0){
+                Transaction t(transactionAmt, false);
+                user.getBankAccount().transact(t);
+                FileManager::saveUser(user);
+                FileManager::saveTransaction(user.getAcctNum(), t);
+            }
+            else { std::cout << "Transaction Error: Negative Number Entered\n"; }
 
             /*
             if (check == 1) {

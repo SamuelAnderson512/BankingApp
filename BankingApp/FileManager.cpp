@@ -3,6 +3,8 @@
 #include<fstream>
 #include <cstdio>
 
+//Test
+
 void FileManager::removeUserFromIndex(int accountNumber)
 {
 	std::ifstream inFile("users/index.txt");
