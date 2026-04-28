@@ -11,6 +11,41 @@ BankAccount::~BankAccount()
     delete[] transactionList;
 }
 
+//Copy Constructor and Copy Assignment Operator are necessary to not cause unsafe memory mishaps
+BankAccount::BankAccount(const BankAccount& other)
+    : balance(other.balance),
+    size(other.size),
+    capacity(other.capacity)
+{
+    transactionList = new Transaction[capacity];
+
+    for (int i = 0; i < size; i++) {
+        transactionList[i] = other.transactionList[i];
+    }
+}
+
+BankAccount& BankAccount::operator=(const BankAccount& other)
+{
+    if (this == &other)
+        return *this;
+
+    delete[] transactionList;
+
+    balance = other.balance;
+    size = other.size;
+    capacity = other.capacity;
+
+    transactionList = new Transaction[capacity];
+
+    for (int i = 0; i < size; i++) {
+        transactionList[i] = other.transactionList[i];
+    }
+
+    return *this;
+}
+
+
+//End of Copy Constructors
 double BankAccount::getBalance() const
 {
     return balance;

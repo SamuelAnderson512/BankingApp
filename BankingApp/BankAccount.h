@@ -14,8 +14,10 @@ protected:
 	void resize();
 
 public:
-	BankAccount(double initialBalance);
-	~BankAccount();
+	BankAccount(double initialBalance = 0);
+	BankAccount(const BankAccount& other);            // copy constructor
+	BankAccount& operator=(const BankAccount& other); // copy assignment
+	~BankAccount();                                   // destructor
 
 	double getBalance() const;
 	void setBalance(double b);

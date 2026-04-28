@@ -36,7 +36,7 @@ void userOperations(User& user) {
         case 1: {
             std::cout << "How Large?\n";
 
-            if (!(std::cin >> transactionAmt)) {
+            if (!(std::cin >> transactionAmt)||transactionAmt<0) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
                 std::cout << "Invalid amount\n";
@@ -52,7 +52,14 @@ void userOperations(User& user) {
         }
         case 2: {
             std::cout << "How Large?\n";
-            std::cin >> transactionAmt;
+
+            if (!(std::cin >> transactionAmt) || transactionAmt < 0) {
+                std::cin.clear();
+                std::cin.ignore(10000, '\n');
+                std::cout << "Invalid amount\n";
+                break;
+            }
+
             Transaction t(transactionAmt, false);
             user.getBankAccount().transact(t);
             FileManager::saveUser(user);
@@ -93,8 +100,9 @@ void managerOperations(Manager& man) {
     while (running) {
         choice = 0;
         std::cout << "1: Delete a User" << std::endl;
-        std::cout << "2:  Check Active Users" << std::endl;
-        std::cout << "3: Exit" << std::endl;
+        std::cout << "2: Check Amt. Active Users" << std::endl;
+        std::cout << "3: List Active Users " << std::endl;
+        std::cout << "4: Exit" << std::endl;
         std::cin >> choice;
 
         if (std::cin.fail()) {
@@ -127,8 +135,15 @@ void managerOperations(Manager& man) {
 
             break;
         }
-
+              
         case 3: {
+
+            FileManager::listUserInformation();
+
+            break;
+        }
+
+        case 4: {
 
             running = false;
 
@@ -194,13 +209,19 @@ void userCreateUi() {
     std::cout << "Enter your Password: \n";
     std::cin >> password;
     //get a password
-    std::cout << "Enter your Balance: \n";
-    std::cin >> balance;
+    do
+    {
+        std::cout << "Enter your Balance: \n";
+        std::cin >> balance;
+    } while (balance < 0);
+   
     //create user object
     User current(name, password, FileManager::getNextAccountNumber(), balance);
     std::cout << "Account Created for " << current.getName() << std::endl;
     FileManager::saveUser(current);
     FileManager::writeUserIndex(current.getAcctNum());
+    Transaction t(balance, true);
+    FileManager::saveTransaction(current.getAcctNum(), t);
     //Call file manager to write user object into a file
     //Move to login(We will need to end the loop end the function, then move to login)
     //We need to return a value so we know whetehr we normal made an account or exited
@@ -294,7 +315,6 @@ void ui() {
 
 int main()
 {
-
     //FileManager::saveUser(user);
     ui();
 }

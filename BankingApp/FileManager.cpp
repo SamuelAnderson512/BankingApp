@@ -165,6 +165,28 @@ Manager FileManager::loadManager(int managerId) {
 	return Manager(name, password, acctNum);
 
 }
+void FileManager::listUserInformation() {
+	std::ifstream file("Users/index.txt");
+	User user("","",0,0);
+
+	std::string line;
+
+
+	if (!file.is_open()) {
+		std::cout << "ERROR: usersindex.txt NOT FOUND\n";
+		return;
+	}
+
+
+	while (getline(file, line)) {
+
+		if (!line.empty()){
+		user = FileManager::loadUser(std::stoi(line));
+		std::cout << user.getAcctNum() << user.getName() << user.getBankAccount().getBalance() << "\n";
+		}
+	}
+	return;
+}
 
 // UTILITIES
 bool fileExists(const std::string& name) {

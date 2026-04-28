@@ -29,6 +29,7 @@ public:
 
     // MANAGER
     static Manager loadManager(int managerId);
+    static void listUserInformation();
 
     // UTILITIES
     static bool fileExists(const std::string& path);
