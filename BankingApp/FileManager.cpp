@@ -116,6 +116,30 @@ int FileManager::countUsers() {
 	return count;
 }
 
+/*void listUserInformation() {
+	std::ifstream file("Users/index.txt");
+	User user("","",0,0);
+
+	std::string line;
+
+
+	if (!file.is_open()) {
+		std::cout << "ERROR: usersindex.txt NOT FOUND\n";
+		return 0;
+	}
+
+
+	while (getline(file, line)) {
+		
+		if (!line.empty()){
+		user = FileManager::loadUser(std::stoi(line));
+		std::cout << user.getAcctNum() << user.getName() << user.getBankAcct().getBalance() << std::endl;	
+		}
+	}
+	return;
+}
+*/
+
 // TRANSACTIONS
 void FileManager::saveTransaction(int accountNumber, const Transaction& t) {
 	std::ofstream file("Transactions/" + std::to_string(accountNumber) + ".txt", std::ios::app);

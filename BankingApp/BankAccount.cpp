@@ -41,11 +41,18 @@ int BankAccount::transact(const Transaction& t)
 {
     // 1. update balance based on transaction type
     if (t.getType() == true) {
+
+        if (t.getAmount() < 0) {
+            std::cout << "You Cannot Deposit Negative Numbers\n";
+            return 0;
+        }
+
         balance += t.getAmount();
+
     }
     else if (t.getType() == false) {
-        if (balance - t.getAmount() < 0) {
-            std::cout << "Transaction Failed: Insufficient Funds\n";
+        if (balance - t.getAmount() < 0 || t.getAmount() < 0) {
+            std::cout << "Transaction Failed\n";
             return 0;
         }
 
