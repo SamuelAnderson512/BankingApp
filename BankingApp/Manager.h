@@ -13,6 +13,8 @@ public:
 
 	void deleteUser(int userNumber);
 	void getActiveAccounts();
+	//listUserAccounts
+	//userInformation()
 	std::string getDirectoryFile() const override;
 	std::string getRole() const override;
 };
