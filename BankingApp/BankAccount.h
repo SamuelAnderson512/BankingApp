@@ -14,6 +14,9 @@ protected:
 	void resize();
 
 public:
+	BankAccount(); // Default constructor
+	BankAccount(const BankAccount& other); // Copy constructor
+	BankAccount& operator=(const BankAccount& other); // Assignment operator
 	BankAccount(double initialBalance);
 	~BankAccount();
 
@@ -25,6 +28,8 @@ public:
 	void loadTransaction(const Transaction& t);
 
 	void printTransactions() const;
+
+	static int activeAccounts;
 
 
 };

@@ -30,5 +30,5 @@ void Manager::deleteUser(int userNumber) {
 void Manager::getActiveAccounts() {
 	//Call fileManager to read index
 	//Placeholder
-	std::cout << "There are " << FileManager::countUsers() << "Active Accounts\n";
+	std::cout << "There are " << FileManager::countUsers() << " Active Accounts\n";
 }
