@@ -21,8 +21,8 @@ void userOperations(User& user) {
 
         std::cout << "1: Make a Deposit" << std::endl;
         std::cout << "2: Make a Withdrawal" << std::endl;
-        std::cout << "3: Exit" << std::endl;
-        std::cout << "4: Show Transactions" << std::endl;
+        std::cout << "3: Show Transactions" << std::endl;
+        std::cout << "4: Exit" << std::endl;
 
         std::cin >> choice;
 
@@ -75,12 +75,14 @@ void userOperations(User& user) {
 
             break;
         }
+
         case 3:
-            running = false;
-            break;
-        case 4:
             user.getBankAccount().printTransactions();
             break;
+        case 4:
+            running = false;
+            break;
+
         default:
             std::cout << "Invalid choice\n";
             break;
@@ -166,17 +168,21 @@ void userLoginUi() {
         std::cout << "Enter Your Account Number" << std::endl;
         std::cout << "Type -1 to Leave" << std::endl;
         std::cin >> accountNumber;
+
+        if (accountNumber == -1) {
+            std::cout << "Terminating Login\n";
+            return;
+        }
+
         std::cout << "Enter Your Password" << std::endl;
         std::cin >> pass;
 
         User user = FileManager::loadUser(accountNumber);
 
-        if (user.getAcctNum() == -1) {
-            std::cout << "Invalid user\n";
-            return;
-        }
 
-        else if (pass != user.getPass() || pass == "") {
+
+        if (pass != user.getPass() || pass == "") {
+            std::cout << "Invalid User ID or Password\n";
             return;
         }
 
@@ -185,20 +191,12 @@ void userLoginUi() {
         userOperations(user);
         return;
 
-        //FileManager Searches User Index for Account Number
-        //IfFound load user class from file using FileManager
-               //userOperations() called with user object passed through
-        //Elseif -1 typed: return
-        //Else try again
-        //return called right after since we assume when they are done with their account that they aren't going to log in again
-
-
     }
 
 }
 void userCreateUi() {
 
-    int accountNumber = 1001;
+    int accountNumber = 999;
     std::string name = "";
     std::string password = "";
     double balance = 0;
@@ -243,6 +241,12 @@ void managerUi() {
         std::cout << "Enter Your Account Number" << std::endl;
         std::cout << "Type -1 to Leave" << std::endl;
         std::cin >> accountNumber;
+
+        if (accountNumber == -1) {
+            std::cout << "Terminating Login\n";
+            return;
+        }
+
         std::cout << "Enter Your Password" << std::endl;
         std::cin >> pass;
 

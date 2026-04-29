@@ -8,6 +8,7 @@ class Manager : public Person {
 
 protected:
 
+	//static data member that keeps track of users
 	static int userAmt;
 
 public:
