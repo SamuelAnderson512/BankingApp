@@ -33,7 +33,7 @@ void FileManager::removeUserFromIndex(int accountNumber)
 void FileManager::saveUser(User& user) {
 
 	std::ofstream file(user.getDirectoryFile());
-
+	file << std::fixed << std::setprecision(10);
 	file << user.getName() << "\n";
 	file << user.getPass() << "\n";
 	file << user.getAcctNum() << "\n";
