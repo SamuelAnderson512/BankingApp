@@ -1,7 +1,9 @@
 #include "FileManager.h"
+#include "Manager.h"
 #include <iostream>
 #include<fstream>
 #include <cstdio>
+#include <iomanip>
 
 void FileManager::removeUserFromIndex(int accountNumber)
 {
@@ -36,6 +38,8 @@ void FileManager::saveUser(User& user) {
 	file << user.getPass() << "\n";
 	file << user.getAcctNum() << "\n";
 	file << user.getBankAccount().getBalance() << "\n";
+
+
 }
 
 User FileManager::loadUser(int accountNumber) {
@@ -166,6 +170,7 @@ Manager FileManager::loadManager(int managerId) {
 
 }
 void FileManager::listUserInformation() {
+	std::cout << std::fixed << std::setprecision(2);
 	std::ifstream file("Users/index.txt");
 	User user("","",0,0);
 
@@ -182,7 +187,7 @@ void FileManager::listUserInformation() {
 
 		if (!line.empty()){
 		user = FileManager::loadUser(std::stoi(line));
-		std::cout << user.getAcctNum() << user.getName() << user.getBankAccount().getBalance() << "\n";
+		std::cout << user.getAcctNum()<< " " << user.getName() << " " << user.getBankAccount().getBalance() << "\n";
 		}
 	}
 	return;

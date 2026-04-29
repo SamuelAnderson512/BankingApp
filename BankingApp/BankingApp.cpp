@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "Manager.h"
 #include "User.h"
 #include "Transaction.h"
@@ -131,7 +132,7 @@ void managerOperations(Manager& man) {
 
         case 2: {
 
-            man.getActiveAccounts();
+            std::cout<<man.getActiveAccounts() << std::endl;
 
             break;
         }
@@ -315,7 +316,7 @@ void ui() {
 
 int main()
 {
-    //FileManager::saveUser(user);
+    std::cout << std::fixed << std::setprecision(2);
     ui();
 }
 
