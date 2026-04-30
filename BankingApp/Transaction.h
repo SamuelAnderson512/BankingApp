@@ -10,14 +10,26 @@ protected:
 public:
 
     Transaction() : amount(0.0), type(true) {}
+
+
     Transaction(double amt, bool t)
-        : amount(amt), type(t) {
+        :type(t) {
+
+        if (amt < 0)
+            amount = 0;
+        else
+            amount = amt;
     }
 
     double getAmount() const { return amount; }
     bool getType() const { return type; }
 
-    void setAmount(double amt) { amount = amt; }
+    void setAmount(double amt) {
+        if (amt < 0)
+            amount = 0;
+        else
+            amount = amt;
+    }
     void setType(bool t) { type = t; }
 
 };

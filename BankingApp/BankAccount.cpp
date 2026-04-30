@@ -126,4 +126,6 @@ void BankAccount::printTransactions() const
     }
 
     std::cout << "----------------------------\n";
+    std::cout << "Balance:" << balance << "\n";
+    std::cout << "----------------------------\n";
 }
