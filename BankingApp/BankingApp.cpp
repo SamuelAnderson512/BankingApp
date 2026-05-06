@@ -134,7 +134,7 @@ void managerOperations(Manager& man) {
 
         case 2: {
 
-            std::cout<<man.getActiveAccounts() << std::endl;
+            std::cout << "There are " << man.getActiveAccounts() << " Active Accounts" << std::endl;
 
             break;
         }
